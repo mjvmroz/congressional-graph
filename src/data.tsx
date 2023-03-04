@@ -1,14 +1,4 @@
-import ReactFlow, {
-  addEdge,
-  FitViewOptions,
-  applyNodeChanges,
-  applyEdgeChanges,
-  Node,
-  Edge,
-  NodeChange,
-  EdgeChange,
-  Connection,
-} from "reactflow";
+import { Node, Edge } from "reactflow";
 
 import episodes from "./episodes.json";
 const typedEpisodes: Record<Slug, Episode> = episodes as never;
@@ -38,7 +28,7 @@ export const episodeGraph: EpisodeGraph = Object.values(typedEpisodes).reduce(
       height: 180,
     };
     const edges: Edge[] = pointers.map((pointer: Slug) => ({
-      id: `${slug}-${pointer}`,
+      id: `ref:${slug}-${pointer}`,
       source: slug,
       target: pointer,
     }));

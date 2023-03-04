@@ -9,8 +9,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/d3-force": "^3.0.4",
     "@types/dagre": "^0.7.48",
+    "d3-force": "^3.0.0",
     "dagre": "^0.8.5",
+    "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "reactflow": "^11.5.6"
