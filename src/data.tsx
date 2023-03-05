@@ -12,7 +12,7 @@ type Episode = {
   description?: string; // HTML
 };
 
-type EpisodeGraph = {
+export type EpisodeGraph = {
   nodes: Node[];
   edges: Edge[];
 };

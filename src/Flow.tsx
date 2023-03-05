@@ -18,7 +18,7 @@ import ReactFlow, {
 import "reactflow/dist/style.css";
 import dagre from "dagre";
 
-import { episodeGraph } from "./data";
+import { EpisodeGraph, episodeGraph } from "./data";
 console.log(episodeGraph);
 
 const fitViewOptions: FitViewOptions = {
@@ -32,16 +32,17 @@ const nodeWidth = 200;
 const nodeHeight = 50;
 
 type GetLaidOutElements = (
-  nodes: Node[],
-  edges: Edge[],
+  episodeGraph: EpisodeGraph,
   direction: "TB" | "LR"
 ) => { nodes: Node[]; edges: Edge[] };
 const getLaidOutElements: GetLaidOutElements = (
-  nodes,
-  edges,
+  episodeGraph,
   direction = "TB"
 ) => {
   const isHorizontal = direction === "LR";
+
+  const { nodes, edges } = episodeGraph;
+
   dagreGraph.setGraph({ rankdir: direction });
 
   nodes.forEach((node) => {
@@ -75,9 +76,59 @@ const getLaidOutElements: GetLaidOutElements = (
   return { nodes, edges };
 };
 
+type Fn<A, B> = (a: A) => B;
+type Endo<A> = Fn<A, A>;
+
+type GroupBy<A> = Fn<Fn<A, string>, Fn<A[], Record<string, A[]>>>;
+
+type Predicate<A> = Fn<A, boolean>;
+type GraphNode = { node: Node; dependencies: Set<Edge>; dependents: Set<Edge> };
+
+const edgesBy: GroupBy<Edge> = (selector) => (edges) => {
+  return edges.reduce((acc, edge) => {
+    const key = selector(edge);
+    const edges = acc[key] || [];
+    return { ...acc, [key]: [...edges, edge] };
+  }, {} as Record<string, Edge[]>);
+};
+
+const filterGraph: Fn<Predicate<GraphNode>, Endo<EpisodeGraph>> =
+  (predicate) => (graph) => {
+    const edgesBySource = edgesBy((edge) => edge.source)(graph.edges);
+    const edgesByTarget = edgesBy((edge) => edge.target)(graph.edges);
+
+    const dependencies = (node: Node) => new Set(edgesBySource[node.id] ?? []);
+    const dependents = (node: Node) => new Set(edgesByTarget[node.id] ?? []);
+
+    const newNodes = new Map(
+      graph.nodes
+        .filter((node) =>
+          predicate({
+            node,
+            dependencies: dependencies(node),
+            dependents: dependents(node),
+          })
+        )
+        .map((node) => [node.id, node])
+    );
+
+    const newEdges = graph.edges.filter(
+      (edge) => newNodes.has(edge.source) && newNodes.has(edge.target)
+    );
+
+    return {
+      nodes: Array.from(newNodes.values()),
+      edges: newEdges,
+    };
+  };
+
+const degree: Fn<GraphNode, number> = ({ dependencies, dependents }) =>
+  new Set([...dependencies, ...dependents]).size;
+
+const condition: Predicate<GraphNode> = (n) => degree(n) > 10;
+
 const initialState = getLaidOutElements(
-  episodeGraph.nodes,
-  episodeGraph.edges,
+  filterGraph(condition)(episodeGraph),
   "LR"
 );
 
@@ -100,7 +151,6 @@ export function Flow() {
     [setEdges]
   );
 
-  // https://reactflow.dev/docs/examples/layout/dagre/
   return (
     <ReactFlow
       nodes={nodes}
