@@ -39,7 +39,7 @@ jobs:
       - name: Upload production-ready build files
         uses: actions/upload-artifact@v3
         with:
-          name: dist
+          name: production-files
           path: ./dist
   deploy:
     environment:
@@ -55,11 +55,11 @@ jobs:
       - name: Download production-ready build files
         uses: actions/download-artifact@v3
         with:
-          name: dist
+          name: production-files
+          path: ./dist
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          # Upload entire repository
           path: "./dist"
       - name: Deploy to GitHub Pages
         id: deployment
