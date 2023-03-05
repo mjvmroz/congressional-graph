@@ -53,6 +53,7 @@ export const episodeGraph: EpisodeGraph = Object.values(typedEpisodes).reduce(
       id: `ref:${slug}=>${pointer}`,
       source: slug,
       target: pointer,
+      style: { stroke: "#222" },
       // TODO: custom types
       // type: "ref",
     }));

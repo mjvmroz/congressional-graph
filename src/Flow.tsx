@@ -38,14 +38,14 @@ const getLaidOutElements: GetLaidOutElements = (
   episodeGraph,
   direction = "TB"
 ) => {
-  const nodeWidth = 300;
-  const nodeHeight = 150;
+  const nodeWidth = 400;
+  const nodeHeight = 250;
 
   const isHorizontal = direction === "LR";
 
   const { nodes, edges } = episodeGraph;
 
-  dagreGraph.setGraph({ rankdir: direction });
+  dagreGraph.setGraph({ rankdir: direction, ranksep: 200 });
 
   nodes.forEach((node) => {
     dagreGraph.setNode(node.id, {

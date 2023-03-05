@@ -28,14 +28,15 @@ export const EpisodeNode: FunctionComponent<EpisodeNodeProps> = memo(
         <Handle
           type="target"
           position={Position.Left}
-          style={{ background: "#555", borderColor: "#555" }}
+          style={{ background: "#222", borderColor: "#222" }}
         />
         <div
           style={{
-            width: "300px",
+            width: "400px",
             backgroundColor: "#FAFAFA",
-            border: "4px solid #555",
-            color: "#555",
+            border: "4px solid #222",
+            borderRadius: "5px",
+            color: "#222",
             overflow: "hidden",
             padding: "10px",
             fontFamily: "'Source Code Pro', monospace",
@@ -74,7 +75,7 @@ export const EpisodeNode: FunctionComponent<EpisodeNodeProps> = memo(
         <Handle
           type="source"
           position={Position.Right}
-          style={{ background: "#555", borderColor: "#555" }}
+          style={{ background: "#222", borderColor: "#222" }}
         />
       </>
     );
