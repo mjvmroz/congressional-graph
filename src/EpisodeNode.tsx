@@ -28,33 +28,43 @@ export const EpisodeNode: FunctionComponent<EpisodeNodeProps> = memo(
         <Handle
           type="target"
           position={Position.Left}
-          style={{ background: "#555" }}
+          style={{ background: "#555", borderColor: "#555" }}
         />
         <div
           style={{
             width: "300px",
-            height: "160px",
             backgroundColor: "#FAFAFA",
-            border: "4px solid #CCC",
+            border: "4px solid #555",
+            color: "#555",
             overflow: "hidden",
             padding: "10px",
+            fontFamily: "'Source Code Pro', monospace",
           }}
         >
-          <h3 style={{ fontFamily: "Gloock, serif" }}>
-            {data.slug}: {data.title}{" "}
+          <span
+            style={{
+              fontWeight: 600,
+            }}
+          >
+            {data.title}
+          </span>{" "}
+          • {data.publishedAt.toISOString().substring(0, 10)}
+          <sup>
             <a
-              href={`https://congressionaldish.com/${data.slug}`}
+              href={`https://congressionaldish.com/${data.slug.replace(
+                "-",
+                ""
+              )}`}
               style={{ color: "inherit", textDecoration: "inherit" }}
               target={"_blank"}
             >
               [&#8599;]
             </a>
-          </h3>
+          </sup>
           <p
             style={{
               display: "block",
               overflow: "hidden",
-              maxHeight: "90px",
               textOverflow: "ellipsis",
             }}
           >
@@ -64,7 +74,7 @@ export const EpisodeNode: FunctionComponent<EpisodeNodeProps> = memo(
         <Handle
           type="source"
           position={Position.Right}
-          style={{ background: "#555" }}
+          style={{ background: "#555", borderColor: "#555" }}
         />
       </>
     );
