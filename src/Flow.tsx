@@ -20,6 +20,7 @@ import dagre from "dagre";
 
 import { EpisodeGraph, episodeGraph } from "./data";
 import { EpisodeNode } from "./EpisodeNode";
+import { GroupBy, Fn, Predicate, Endo } from "./Fn";
 console.log(episodeGraph);
 
 const fitViewOptions: FitViewOptions = {
@@ -77,12 +78,6 @@ const getLaidOutElements: GetLaidOutElements = (
   return { nodes, edges };
 };
 
-type Fn<A, B> = (a: A) => B;
-type Endo<A> = Fn<A, A>;
-
-type GroupBy<A> = Fn<Fn<A, string>, Fn<A[], Record<string, A[]>>>;
-
-type Predicate<A> = Fn<A, boolean>;
 type GraphNode = { node: Node; dependencies: Set<Edge>; dependents: Set<Edge> };
 
 const edgesBy: GroupBy<Edge> = (selector) => (edges) => {

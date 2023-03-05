@@ -23,11 +23,6 @@ const parser = new DOMParser();
 
 export const EpisodeNode: FunctionComponent<EpisodeNodeProps> = memo(
   ({ data }) => {
-    const htmlDoc = parser.parseFromString(
-      `<body>${data.description ?? ""}</body>`,
-      "text/html"
-    );
-    const text = htmlDoc.body.innerText;
     return (
       <>
         <Handle
@@ -63,7 +58,7 @@ export const EpisodeNode: FunctionComponent<EpisodeNodeProps> = memo(
               textOverflow: "ellipsis",
             }}
           >
-            {text}
+            {data.preview ?? ""}
           </p>
         </div>
         <Handle
