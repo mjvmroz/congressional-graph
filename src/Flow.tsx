@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import ReactFlow, {
   addEdge,
   FitViewOptions,
@@ -9,16 +9,17 @@ import ReactFlow, {
   NodeChange,
   EdgeChange,
   Connection,
-  MiniMap,
   Background,
   Controls,
   Position,
+  NodeTypes,
 } from "reactflow";
 
 import "reactflow/dist/style.css";
 import dagre from "dagre";
 
 import { EpisodeGraph, episodeGraph } from "./data";
+import { EpisodeNode } from "./EpisodeNode";
 console.log(episodeGraph);
 
 const fitViewOptions: FitViewOptions = {
@@ -28,9 +29,6 @@ const fitViewOptions: FitViewOptions = {
 const dagreGraph = new dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));
 
-const nodeWidth = 200;
-const nodeHeight = 50;
-
 type GetLaidOutElements = (
   episodeGraph: EpisodeGraph,
   direction: "TB" | "LR"
@@ -39,6 +37,9 @@ const getLaidOutElements: GetLaidOutElements = (
   episodeGraph,
   direction = "TB"
 ) => {
+  const nodeWidth = 300;
+  const nodeHeight = 150;
+
   const isHorizontal = direction === "LR";
 
   const { nodes, edges } = episodeGraph;
@@ -131,6 +132,7 @@ const initialState = getLaidOutElements(
   filterGraph(condition)(episodeGraph),
   "LR"
 );
+const nodeTypes = { episode: EpisodeNode };
 
 export function Flow() {
   const [nodes, setNodes] = useState<Node[]>(initialState.nodes);
@@ -160,10 +162,13 @@ export function Flow() {
       onConnect={onConnect}
       fitView
       fitViewOptions={fitViewOptions}
+      nodesConnectable={false}
+      elementsSelectable={false}
+      zoomOnDoubleClick={false}
+      nodeTypes={nodeTypes as NodeTypes}
     >
       <Background />
       <Controls />
-      <MiniMap />
     </ReactFlow>
   );
 }
