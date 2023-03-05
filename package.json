@@ -4,9 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "yarn run vite",
-    "build": "yarn run tsc && yarn run vite build",
-    "preview": "yarn run vite preview"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
     "@types/d3-force": "^3.0.4",
