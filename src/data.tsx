@@ -2,21 +2,28 @@ import { Node, Edge } from "reactflow";
 
 import episodes from "./episodes.json";
 import { Fn } from "./Fn";
-const typedEpisodes: Record<Slug, JsonEpisode> = episodes as never;
+const typedEpisodes: JsonFile = episodes as any;
 
 type Slug = string;
 
+type JsonFile = {
+  episodes: JsonEpisode[];
+  adjacency_reduced_edges: Record<number, number>;
+};
+
 type JsonEpisode = {
-  slug: Slug;
+  number: number;
+  slug: string;
   published_at: number;
   title: string;
-  pointers: Slug[];
+  pointers: number[];
   preview?: string;
 };
 
 const fromJson: Fn<JsonEpisode, Episode> = (jsonEpisode) => {
-  const { slug, title, pointers, preview } = jsonEpisode;
+  const { number, slug, title, pointers, preview } = jsonEpisode;
   return {
+    number,
     slug,
     publishedAt: new Date(jsonEpisode.published_at),
     title,
@@ -26,10 +33,11 @@ const fromJson: Fn<JsonEpisode, Episode> = (jsonEpisode) => {
 };
 
 export type Episode = {
-  slug: Slug;
+  number: number;
+  slug: string;
   publishedAt: Date;
   title: string;
-  pointers: Slug[];
+  pointers: number[];
   preview?: string;
 };
 
@@ -38,29 +46,19 @@ export type EpisodeGraph = {
   edges: Edge[];
 };
 
-const slugNumber = (slug: Slug) => Number(slug.split("CD-")[1]);
-
-export const episodeGraph: EpisodeGraph = Object.values(typedEpisodes).reduce(
-  (graph: EpisodeGraph, jsonEp: JsonEpisode) => {
-    const { slug, pointers } = jsonEp;
-    const node: Node = {
-      id: slug,
-      data: fromJson(jsonEp),
-      position: { x: 0, y: 0 },
-      type: "episode",
-    };
-    const edges: Edge[] = pointers.map((pointer: Slug) => ({
-      id: `ref:${slug}=>${pointer}`,
-      source: slug,
-      target: pointer,
+export const episodeGraph: EpisodeGraph = {
+  nodes: typedEpisodes.episodes.map((jsonEp) => ({
+    id: jsonEp.number.toString(),
+    data: fromJson(jsonEp),
+    position: { x: 0, y: 0 },
+    type: "episode",
+  })),
+  edges: Object.entries(typedEpisodes.adjacency_reduced_edges).map(
+    ([from, to]) => ({
+      id: `ref:${from}=>${to}`,
+      source: from,
+      target: to.toString(),
       style: { stroke: "#222" },
-      // TODO: custom types
-      // type: "ref",
-    }));
-    return {
-      nodes: [...graph.nodes, node],
-      edges: [...graph.edges, ...edges],
-    };
-  },
-  { nodes: [], edges: [] }
-);
+    })
+  ),
+};

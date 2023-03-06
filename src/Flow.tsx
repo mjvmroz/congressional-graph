@@ -13,12 +13,13 @@ import ReactFlow, {
   Controls,
   Position,
   NodeTypes,
+  MiniMap,
 } from "reactflow";
 
 import "reactflow/dist/style.css";
 import dagre from "dagre";
 
-import { EpisodeGraph, episodeGraph } from "./data";
+import { Episode, EpisodeGraph, episodeGraph } from "./data";
 import { EpisodeNode } from "./EpisodeNode";
 import { GroupBy, Fn, Predicate, Endo } from "./Fn";
 console.log(episodeGraph);
@@ -78,7 +79,11 @@ const getLaidOutElements: GetLaidOutElements = (
   return { nodes, edges };
 };
 
-type GraphNode = { node: Node; dependencies: Set<Edge>; dependents: Set<Edge> };
+type GraphNode = {
+  node: Node<Episode>;
+  dependencies: Set<Edge>;
+  dependents: Set<Edge>;
+};
 
 const edgesBy: GroupBy<Edge> = (selector) => (edges) => {
   return edges.reduce((acc, edge) => {
@@ -118,10 +123,12 @@ const filterGraph: Fn<Predicate<GraphNode>, Endo<EpisodeGraph>> =
     };
   };
 
-const degree: Fn<GraphNode, number> = ({ dependencies, dependents }) =>
-  new Set([...dependencies, ...dependents]).size;
+const reducedAdjacencyDegree: Fn<GraphNode, number> = ({
+  dependencies,
+  dependents,
+}) => new Set([...dependencies, ...dependents]).size;
 
-const condition: Predicate<GraphNode> = (n) => degree(n) > 10;
+const condition: Predicate<GraphNode> = (n) => reducedAdjacencyDegree(n) > 0;
 
 const initialState = getLaidOutElements(
   filterGraph(condition)(episodeGraph),
@@ -164,6 +171,7 @@ export function Flow() {
     >
       <Background />
       <Controls />
+      <MiniMap pannable={true} zoomable={true} />
     </ReactFlow>
   );
 }
