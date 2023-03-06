@@ -24,7 +24,6 @@ import dagre from "dagre";
 import { Episode, EpisodeGraph, episodeGraph } from "./data";
 import { EpisodeNode } from "./EpisodeNode";
 import { GroupBy, Fn, Predicate, Endo } from "./Fn";
-console.log(episodeGraph);
 
 const fitViewOptions: FitViewOptions = {
   padding: 0.2,
