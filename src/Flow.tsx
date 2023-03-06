@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback } from "react";
 import ReactFlow, {
   addEdge,
   FitViewOptions,
@@ -14,6 +14,8 @@ import ReactFlow, {
   Position,
   NodeTypes,
   MiniMap,
+  useReactFlow,
+  ReactFlowProvider,
 } from "reactflow";
 
 import "reactflow/dist/style.css";
@@ -136,7 +138,8 @@ const initialState = getLaidOutElements(
 );
 const nodeTypes = { episode: EpisodeNode };
 
-export function Flow() {
+function RawConGraph() {
+  const {} = useReactFlow();
   const [nodes, setNodes] = useState<Node[]>(initialState.nodes);
   const [edges, setEdges] = useState<Edge[]>(initialState.edges);
 
@@ -164,6 +167,8 @@ export function Flow() {
       onConnect={onConnect}
       fitView
       fitViewOptions={fitViewOptions}
+      minZoom={0.05}
+      maxZoom={1}
       nodesConnectable={false}
       elementsSelectable={false}
       zoomOnDoubleClick={false}
@@ -173,5 +178,13 @@ export function Flow() {
       <Controls />
       <MiniMap pannable={true} zoomable={true} />
     </ReactFlow>
+  );
+}
+
+export function Flow() {
+  return (
+    <ReactFlowProvider>
+      <RawConGraph />
+    </ReactFlowProvider>
   );
 }
