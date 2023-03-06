@@ -42,35 +42,30 @@ export const EpisodeNode: FunctionComponent<EpisodeNodeProps> = memo(
             fontFamily: "'Source Code Pro', monospace",
           }}
         >
-          <span
-            style={{
-              fontWeight: 600,
-            }}
+          <a
+            href={`https://congressionaldish.com/${data.slug.replace("-", "")}`}
+            style={{ color: "inherit", textDecoration: "inherit" }}
+            target={"_blank"}
           >
-            {data.title}
-          </span>{" "}
-          • {data.publishedAt.toISOString().substring(0, 10)}
-          <sup>
-            <a
-              href={`https://congressionaldish.com/${data.slug.replace(
-                "-",
-                ""
-              )}`}
-              style={{ color: "inherit", textDecoration: "inherit" }}
-              target={"_blank"}
+            <span
+              style={{
+                fontWeight: 600,
+              }}
             >
-              [&#8599;]
-            </a>
-          </sup>
-          <p
-            style={{
-              display: "block",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-            }}
-          >
-            {data.preview ?? ""}
-          </p>
+              {data.title}
+            </span>{" "}
+            • {data.publishedAt.toISOString().substring(0, 10)}
+            <sup>[&#8599;]</sup>
+            <p
+              style={{
+                display: "block",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+              }}
+            >
+              {data.preview ?? ""}
+            </p>
+          </a>
         </div>
         <Handle
           type="source"

@@ -172,9 +172,10 @@ function RawConGraph() {
       elementsSelectable={false}
       zoomOnDoubleClick={false}
       nodeTypes={nodeTypes as NodeTypes}
+      proOptions={{ hideAttribution: true }}
     >
       <Background />
-      <Controls />
+      <Controls showInteractive={false} fitViewOptions={fitViewOptions} />
       <MiniMap pannable={true} zoomable={true} />
     </ReactFlow>
   );
