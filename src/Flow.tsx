@@ -176,7 +176,7 @@ function RawConGraph() {
     >
       <Background />
       <Controls showInteractive={false} fitViewOptions={fitViewOptions} />
-      <MiniMap pannable={true} zoomable={true} />
+      <MiniMap pannable={true} zoomable={true} ariaLabel={null} />
     </ReactFlow>
   );
 }
