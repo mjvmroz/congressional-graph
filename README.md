@@ -13,6 +13,8 @@ Data is fetched from the RSS feed and parsed into a graph [separately](https://g
 - [Node](https://nodejs.org/en/)
 - [Yarn](https://yarnpkg.com/)
 
+`direnv` + `Nix` users should get a functioning chain via `./flake.nix` for free providing they `direnv allow`!
+
 ## Setup and go
 
 ```bash
