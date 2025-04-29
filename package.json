@@ -9,8 +9,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@types/d3-force": "^3.0.4",
-    "@types/dagre": "^0.7.48",
     "d3-force": "^3.0.0",
     "dagre": "^0.8.5",
     "lodash": "^4.17.21",
@@ -20,6 +18,8 @@
     "stitches": "^1.2.11"
   },
   "devDependencies": {
+    "@types/d3-force": "^3.0.4",
+    "@types/dagre": "^0.7.48",
     "@types/react": "19.1.2",
     "@types/react-dom": "19.1.2",
     "@vitejs/plugin-react-swc": "^3.0.0",
