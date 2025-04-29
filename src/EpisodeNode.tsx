@@ -52,7 +52,7 @@ export const EpisodeNode: FunctionComponent<EpisodeNodeProps> = memo(
                 fontWeight: 600,
               }}
             >
-              {data.title}
+              CD{data.number}: {data.title}
             </span>{" "}
             • {data.publishedAt.toISOString().substring(0, 10)}
             <sup>[&#8599;]</sup>

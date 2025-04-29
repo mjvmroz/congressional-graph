@@ -29,16 +29,14 @@ const fitViewOptions: FitViewOptions = {
   padding: 0.2,
 };
 
-const dagreGraph = new dagre.graphlib.Graph();
-dagreGraph.setDefaultEdgeLabel(() => ({}));
-
 type GetLaidOutElements = (
   episodeGraph: EpisodeGraph,
   direction: "TB" | "LR"
 ) => { nodes: Node[]; edges: Edge[] };
+
 const getLaidOutElements: GetLaidOutElements = (
   episodeGraph,
-  direction = "TB"
+  direction = "LR"
 ) => {
   const nodeWidth = 400;
   const nodeHeight = 250;
@@ -47,7 +45,16 @@ const getLaidOutElements: GetLaidOutElements = (
 
   const { nodes, edges } = episodeGraph;
 
-  dagreGraph.setGraph({ rankdir: direction, ranksep: 200 });
+  const dagreGraph = new dagre.graphlib.Graph({
+    directed: true,
+    compound: true,
+  });
+  dagreGraph.setDefaultEdgeLabel(() => ({}));
+  dagreGraph.setGraph({
+    rankdir: direction,
+    ranksep: 400,
+    ranker: "longest-path",
+  });
 
   nodes.forEach((node) => {
     dagreGraph.setNode(node.id, {
