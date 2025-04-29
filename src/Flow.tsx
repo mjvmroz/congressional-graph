@@ -136,7 +136,7 @@ const reducedAdjacencyDegree: Fn<GraphNode, number> = ({
   dependents,
 }) => new Set([...dependencies, ...dependents]).size;
 
-const condition: Predicate<GraphNode> = (n) => reducedAdjacencyDegree(n) > 0;
+const condition: Predicate<GraphNode> = (n) => reducedAdjacencyDegree(n) >= 1;
 
 const initialState = getLaidOutElements(
   filterGraph(condition)(episodeGraph),
